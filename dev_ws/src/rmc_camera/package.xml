@@ -21,4 +21,5 @@
 
   <depend>python3-opencv</depend>
   <depend>cv_bridge</depend>
+  <depend>python3-flask</depend>
 </package>

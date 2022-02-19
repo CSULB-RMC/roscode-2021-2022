@@ -28,6 +28,10 @@ class FeedPublisher(Node):
         self.timer = self.create_timer(self.TIMER_PERIOD, self.timer_callback)
 
     def timer_callback(self):
+        """
+        timer call back function for periodically publishing camera feed data
+        """
+
         ret, frame = self.capture.read()
 
         if not ret:

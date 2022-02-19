@@ -1,0 +1,4 @@
+#!/bin/bash
+sudo apt-get update
+rosdep update
+rosdep install -i --from-path src --rosdistro foxy -y
