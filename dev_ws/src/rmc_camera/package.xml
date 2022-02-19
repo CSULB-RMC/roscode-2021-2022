@@ -18,4 +18,7 @@
 
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
+
+  <depend>python3-opencv</depend>
+  <depend>cv_bridge</depend>
 </package>

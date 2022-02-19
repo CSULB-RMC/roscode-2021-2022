@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'publisher_feed = rmc_camera.publisher_feed:main',
             'publisher_object_detection = rmc_camera.publisher_object_detection:main',
+            'subscriber_feed = rmc_camera.subscriber_feed:main',
         ],
     },
 )
