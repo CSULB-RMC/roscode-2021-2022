@@ -42,6 +42,8 @@ class FeedSubscriber(Node):
         )
 
         frame = self.bridge.imgmsg_to_cv2(msg)
+        frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY) # makes the frame greyscale
+        (thresh, frame) = cv.threshold(frame, 100, 255, cv.THRESH_BINARY) # binary threshold to make a black and white image
         ret, buffer = cv.imencode(".jpg", frame)
         frame = buffer.tobytes()
 
