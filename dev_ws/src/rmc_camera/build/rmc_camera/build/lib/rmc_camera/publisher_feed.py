@@ -13,13 +13,13 @@ from cv_bridge import CvBridge
 
 class FeedPublisher(Node):
     TIMER_PERIOD = 0.1
-    VIDEO_FEED = "/ros/dev_ws/src/rmc_camera/test/IMG_0363.MOV"
+    VIDEO_FEED = "/dev/video0"
     VIDEO_DRIVER = cv.CAP_V4L2
 
     def __init__(self):
         super().__init__("publisher_feed")
         # opencv camera capture
-        self.capture = cv.VideoCapture(self.VIDEO_FEED)
+        self.capture = cv.VideoCapture(self.VIDEO_FEED, self.VIDEO_DRIVER)
         self.bridge = CvBridge()
 
         # using bytes
