@@ -4,3 +4,9 @@
 [submodule "dev_ws/src/rmc_teleop"]
 	path = dev_ws/src/rmc_teleop
 	url = https://github.com/CSULB-RMC/roscode-teleop.git
+[submodule "dev_ws/src/rmc_arduino"]
+	path = dev_ws/src/rmc_arduino
+	url = https://github.com/CSULB-RMC/roscode-arduino.git
+[submodule "dev_ws/src/rmc_positiontracking"]
+	path = dev_ws/src/rmc_positiontracking
+	url = https://github.com/CSULB-RMC/roscode-position-tracking.git
