@@ -1,0 +1,6 @@
+[submodule "dev_ws/src/rmc_camera"]
+	path = dev_ws/src/rmc_camera
+	url = https://github.com/CSULB-RMC/roscode-camera.git
+[submodule "dev_ws/src/rmc_teleop"]
+	path = dev_ws/src/rmc_teleop
+	url = https://github.com/CSULB-RMC/roscode-teleop.git
