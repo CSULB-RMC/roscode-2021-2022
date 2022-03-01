@@ -10,3 +10,6 @@
 [submodule "dev_ws/src/rmc_positiontracking"]
 	path = dev_ws/src/rmc_positiontracking
 	url = https://github.com/CSULB-RMC/roscode-position-tracking.git
+[submodule "dev_ws/src/rmc_cameramsg"]
+	path = dev_ws/src/rmc_cameramsg
+	url = https://github.com/CSULB-RMC/roscode-cameramsg
