@@ -16,7 +16,7 @@ RUN usermod -aG sudo user
 RUN echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN apt-get update
-RUN apt-get install -y xboxdrv ros-foxy-joy ros-foxy-joy-linux
+#RUN apt-get install -y xboxdrv ros-foxy-joy ros-foxy-joy-linux
 #we used to install ros-noetic-joystick-drivers, but something broke with it.
 #ros-noetic-joy should have the drivers we need though...
 
