@@ -95,7 +95,7 @@ print('uid:', os.getuid())
 print('gid:', os.getgid())
 print('video gid:', grp.getgrnam('video').gr_gid)
 
-docparams='--network host -v $PWD:/ros -w /ros -v /dev/shm:/dev/shm --device=/dev/video0:/dev/video0' 
+docparams='--network host -v $PWD:/ros -w /ros -v /dev/shm:/dev/shm ' 
 
 fullbuildexec = 'docker build -f Dockerfile' + nc_env + ' --build-arg USER_ID=' + str(os.getuid()) + ' --build-arg GROUP_ID=' + str(os.getgid()) + ' --build-arg VIDEO_GROUP_ID=' + str(grp.getgrnam('video').gr_gid) + ' . -t rmc:ros2'
 os.system(fullbuildexec)
