@@ -12,11 +12,11 @@ ARG GROUP_ID
 ARG VIDEO_GROUP_ID
 
 RUN addgroup --gid $GROUP_ID user
-RUN addgroup --gid $VIDEO_GROUP_ID video_host
+RUN addgroup --gid $VIDEO_GROUP_ID video_host || true
 RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
 
 RUN usermod -aG sudo user
-RUN usermod -aG video_host user
+RUN usermod -aG $VIDEO_GROUP_ID user
 RUN echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN apt-get update
