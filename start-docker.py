@@ -2,23 +2,28 @@
 
 import os
 import sys
+import grp
 
 #Docker file template:
 docker_header = """FROM ros:foxy-ros-base
 
 ARG USER_ID
 ARG GROUP_ID
+ARG VIDEO_GROUP_ID
 
 RUN addgroup --gid $GROUP_ID user
+RUN addgroup --gid $VIDEO_GROUP_ID video_host
 RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
 
 RUN usermod -aG sudo user
+RUN usermod -aG video_host user
 RUN echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN apt-get update
 #RUN apt-get install -y xboxdrv ros-foxy-joy ros-foxy-joy-linux
 #we used to install ros-noetic-joystick-drivers, but something broke with it.
 #ros-noetic-joy should have the drivers we need though...
+RUN echo "KERNEL==\"video[0-9]*\",MODE=\"0666\"" > /usr/lib/udev/rules.d/99-camera.rules
 
 USER user
 
@@ -48,6 +53,7 @@ df.write(docker_file_string)
 df.close()
 #dockerfile constructed
 
+#joystick detection
 joydev=''
 
 for x in range(6):
@@ -63,6 +69,23 @@ if joydev == '':
 else:
     print('Joy device is', joydev)
     joydev = '--device=' + joydev
+#end joystick
+
+#camera detection
+cameradev=''
+
+for x in range(6):
+    campath = '/dev/video' + str(x)
+    if os.path.exists(campath):
+        cameradev += ' --device=' + campath + ' '
+        print('Adding camera: ', campath) 
+        break
+
+if cameradev == '':
+    print('###############################')
+    print('WARNING: Camera not detected.  Camera nodes will not work.')
+    print('###############################')
+#end camera
 
 nc_env=''
 if '-no-cache' in sys.argv:
@@ -70,10 +93,11 @@ if '-no-cache' in sys.argv:
 
 print('uid:', os.getuid())
 print('gid:', os.getgid())
+print('video gid:', grp.getgrnam('video').gr_gid)
 
 docparams='--network host -v $PWD:/ros -w /ros -v /dev/shm:/dev/shm --device=/dev/video0:/dev/video0' 
 
-fullbuildexec = 'docker build -f Dockerfile' + nc_env + ' --build-arg USER_ID=' + str(os.getuid()) + ' --build-arg GROUP_ID=' + str(os.getgid()) + ' . -t rmc:ros2'
+fullbuildexec = 'docker build -f Dockerfile' + nc_env + ' --build-arg USER_ID=' + str(os.getuid()) + ' --build-arg GROUP_ID=' + str(os.getgid()) + ' --build-arg VIDEO_GROUP_ID=' + str(grp.getgrnam('video').gr_gid) + ' . -t rmc:ros2'
 os.system(fullbuildexec)
-fullrunexec = 'docker run ' + docparams + ' ' + joydev + ' --rm -it rmc:ros2'
+fullrunexec = 'docker run ' + docparams + ' ' + joydev + cameradev + ' --rm -it rmc:ros2'
 os.system(fullrunexec)
