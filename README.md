@@ -39,7 +39,7 @@ Note: In the future, I hope to make a way for Windows users to easily use this c
 Open up the "Terminal" program, and type the following command to download the repository.
 
 ```
-git clone https://github.com/CSULB-RMC/roscode-2021-2022.git
+git clone --recursive https://github.com/CSULB-RMC/roscode-2021-2022.git
 ```
 Then move into that directory with this command:
 
@@ -69,12 +69,9 @@ The following section is WIP and a bit sparce.  Please contact me if you need he
 
 ### Building the Packages
 
-Note: you may have to run the `rosdep update` first if you experience an error trying to install the dependencies:
-
-Now run the following:
+Run the following:
 ```
 cd dev_ws
-rosdep install -i --from-path src --rosdistro foxy -y
 colcon build
 source install/setup.bash
 ```
@@ -88,14 +85,6 @@ ros2 run rmc_teleop gamepad_control
 
 ### Creating a new Package
 
-Make sure you are in the `dev_ws/src` folder:
-```
-cd dev_ws/src
-```
-
-The following will create a new python package with the name "rmc_my_package" and the node name "my_node":
-```
-ros2 pkg create --build-type ament_python --node-name my_node rmc_my_package
-```
+Packages should be created by creating a new git repo and adding that repo as a submodule in the `dev_ws/src` folder. Please inform me if you need to create a new repository under the CSULB-RMC organization.
 
 **Note: for this projects all packages created should begin with the prefix "rmc_" to show that this is a package associated with the project.** Node names can be anything, however.
