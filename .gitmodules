@@ -4,6 +4,7 @@
 [submodule "dev_ws/src/rmc_teleop"]
 	path = dev_ws/src/rmc_teleop
 	url = https://github.com/CSULB-RMC/roscode-teleop.git
+	branch = main
 [submodule "dev_ws/src/rmc_arduino"]
 	path = dev_ws/src/rmc_arduino
 	url = https://github.com/CSULB-RMC/roscode-arduino.git
