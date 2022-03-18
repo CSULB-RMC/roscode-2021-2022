@@ -5,7 +5,12 @@ import sys
 import grp
 
 #Docker file template:
-docker_header = """FROM ros:foxy-ros-base
+docker_header = """#################################
+# THIS FILE IS AUTO-GENERATED
+# DO NOT EDIT DIRECTLY
+#################################
+
+FROM ros:foxy-ros-base
 
 ARG USER_ID
 ARG GROUP_ID
@@ -89,7 +94,7 @@ if cameradev == '':
 
 nc_env=''
 if '-no-cache' in sys.argv:
-    nc_env='--no-cache'
+    nc_env='--no-cache --pull'
 
 print('uid:', os.getuid())
 print('gid:', os.getgid())
@@ -97,7 +102,7 @@ print('video gid:', grp.getgrnam('video').gr_gid)
 
 docparams='--network host -v $PWD:/ros -w /ros -v /dev/shm:/dev/shm ' 
 
-fullbuildexec = 'docker build -f Dockerfile' + nc_env + ' --build-arg USER_ID=' + str(os.getuid()) + ' --build-arg GROUP_ID=' + str(os.getgid()) + ' --build-arg VIDEO_GROUP_ID=' + str(grp.getgrnam('video').gr_gid) + ' . -t rmc:ros2'
+fullbuildexec = 'docker build -f Dockerfile ' + nc_env + ' --build-arg USER_ID=' + str(os.getuid()) + ' --build-arg GROUP_ID=' + str(os.getgid()) + ' --build-arg VIDEO_GROUP_ID=' + str(grp.getgrnam('video').gr_gid) + ' . -t rmc:ros2'
 os.system(fullbuildexec)
 fullrunexec = 'docker run ' + docparams + ' ' + joydev + cameradev + ' --rm -it rmc:ros2'
 os.system(fullrunexec)
