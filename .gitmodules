@@ -14,3 +14,6 @@
 [submodule "dev_ws/src/rmc_cameramsg"]
 	path = dev_ws/src/rmc_cameramsg
 	url = https://github.com/CSULB-RMC/roscode-cameramsg
+[submodule "dev_ws/src/rmc_autonomy"]
+	path = dev_ws/src/rmc_autonomy
+	url = https://github.com/CSULB-RMC/roscode-autonomy
