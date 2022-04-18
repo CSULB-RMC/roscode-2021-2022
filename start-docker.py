@@ -37,6 +37,7 @@ RUN /bin/bash /opt/ros/foxy/setup.bash
 
 docker_footer = """RUN rosdep update
 RUN rosdep install -i --from-path /ros/dev_ws/src --rosdistro foxy -y
+RUN echo "source /ros/dev_ws/install/setup.bash || true" >> /home/user/.bashrc
 """
 
 #construct dockerfile
