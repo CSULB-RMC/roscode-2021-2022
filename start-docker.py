@@ -25,7 +25,7 @@ RUN usermod -aG $VIDEO_GROUP_ID user
 RUN echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN apt-get update
-#RUN apt-get install -y xboxdrv ros-foxy-joy ros-foxy-joy-linux
+RUN apt-get upgrade -y
 #we used to install ros-noetic-joystick-drivers, but something broke with it.
 #ros-noetic-joy should have the drivers we need though...
 RUN echo "KERNEL==\"video[0-9]*\",MODE=\"0666\"" > /usr/lib/udev/rules.d/99-camera.rules
@@ -65,7 +65,6 @@ for x in range(6):
     jsts = '/dev/input/js' + str(x)
     if os.path.exists(jsts):
         joydev=jsts
-        break
 
 if joydev == '':
     print('###############################')
@@ -84,7 +83,6 @@ for x in range(6):
     if os.path.exists(campath):
         cameradev += ' --device=' + campath + ' '
         print('Adding camera: ', campath) 
-        break
 
 if cameradev == '':
     print('###############################')
@@ -100,7 +98,7 @@ print('uid:', os.getuid())
 print('gid:', os.getgid())
 print('video gid:', grp.getgrnam('video').gr_gid)
 
-docparams='--network host -v $PWD:/ros -w /ros -v /dev/shm:/dev/shm ' 
+docparams='--network host -v $PWD:/ros -w /ros -v /dev/shm:/dev/shm -e ROS_DOMAIN_ID=49' 
 
 fullbuildexec = 'docker build -f Dockerfile ' + nc_env + ' --build-arg USER_ID=' + str(os.getuid()) + ' --build-arg GROUP_ID=' + str(os.getgid()) + ' --build-arg VIDEO_GROUP_ID=' + str(grp.getgrnam('video').gr_gid) + ' . -t rmc:ros2'
 os.system(fullbuildexec)
