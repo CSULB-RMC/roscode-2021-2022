@@ -20,9 +20,10 @@ def getsubmodules(root):
 def setsubmodulemain(root, sms):
     for x in sms:
         print("Setting module", x, "to main branch...")
-        os.system("cd " + os.path.join(root, x) + " && git checkout main && git submodule update --init")
-        if os.path.exists(os.path.join(x, ".gitsubmodules")):
-            setsubmodulemain(x, getsubmodules(x))
+        fp = os.path.join(root, x)
+        os.system("cd " + fp + " && git checkout main && git submodule update --init")
+        if os.path.exists(os.path.join(fp, ".gitmodules")):
+            setsubmodulemain(fp, getsubmodules(fp))
 
 
 print("Performing initial setup...")
