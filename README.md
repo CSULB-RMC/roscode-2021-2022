@@ -89,7 +89,7 @@ Currently the possible config values are:
 
 Name | Possible Values | Description
 ---|---|---
-`default-launch-type` | `shell`, `autonomy` | Controls what gets launched on startup. Shell is just the default terminal, autonomy launches all of the nodes needed for full autonomy.
+`default-launch-type` | `shell`, `autonomy` | Controls what gets launched on startup. <ul><li>`shell` is just the default terminal</li><li>`autonomy` launches all of the nodes needed for full autonomy</li><li>`build` is to build and configure all of the packages</li></ul>
 
 
 ### Creating a new Package

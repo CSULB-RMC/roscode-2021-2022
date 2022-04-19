@@ -1,6 +1,8 @@
 dev_ws/build
 dev_ws/install
 dev_ws/log
+dev_ws/src/ros2.repos
+dev_ws/src/uros
 
 launch/__pycache__
 
