@@ -3,6 +3,24 @@
 import os
 import sys
 import grp
+import json
+
+config_file_name = "lbl_config.json"
+
+#load json config
+if not os.path.isfile(config_file_name):
+    ex_config_data = open(config_file_name + ".example", "r")
+    config_data_file = open(config_file_name, "w")
+    config_data_file.write(ex_config_data.read())
+    config_data_file.close()
+    config_data_file = open(config_file_name, "r")
+    ex_config_data.close()
+
+else:
+    config_data_file = open(config_file_name, "r")
+
+config_data = json.loads(config_data_file.read())
+config_data_file.close()
 
 #Docker file template:
 docker_header = """#################################
@@ -40,6 +58,15 @@ RUN rosdep install -i --from-path /ros/dev_ws/src --rosdistro foxy -y
 RUN echo "source /ros/dev_ws/install/setup.bash || true" >> /home/user/.bashrc
 """
 
+docker_file_string = docker_header
+
+def adddockerfile(file_to_add):
+    global docker_file_string
+    docker_file_string += 'ADD ' + file_to_add + ' /ros/' + file_to_add + '\n'
+
+def genlaunchstring(launch_file):
+    return 'RUN echo "ros2 launch ' + launch_file + ' && exit" >> /home/user/.bashrc\n'
+
 #construct dockerfile
 package_dirs=[]
 search_dir = os.path.join('dev_ws', 'src')
@@ -48,11 +75,28 @@ for fn in os.listdir(search_dir):
         print('Found package ', fn)
         package_dirs.append(fn)
 
-docker_file_string = docker_header
+
 for pkg in package_dirs:
     docker_file_string += 'ADD dev_ws/src/' + pkg + '/package.xml /ros/dev_ws/src/' + pkg + '/package.xml\n'
 
 docker_file_string += docker_footer
+
+launch_type_string = "shell"
+if config_data["default-launch-type"]:
+    launch_type_string = config_data["default-launch-type"]
+
+if '-launch-type' in sys.argv:
+    launch_type_string = sys.argv[sys.argv.index('-launch-type')+1]
+
+print("Launch type:", launch_type_string)
+
+if launch_type_string == "shell":
+    pass
+elif launch_type_string == "autonomy":
+    docker_file_string += genlaunchstring('launch/rmc_launch_autonomy.py')
+else:
+    print("Invalid launch type.")
+    quit()
 
 df = open('Dockerfile', 'w')
 df.write(docker_file_string)

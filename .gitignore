@@ -5,3 +5,5 @@ dev_ws/log
 launch/__pycache__
 
 Dockerfile
+
+lbl_config.json

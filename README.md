@@ -82,6 +82,15 @@ Teleop:
 ```
 ros2 run rmc_teleop gamepad_control
 ```
+### Config File
+Inside this repo is the file `lbl_config.json.example`. It contains an example config used by the docker script that creates the docker image.
+
+Currently the possible config values are:
+
+Name | Possible Values | Description
+---|---|---
+`default-launch-type` | `shell`, `autonomy` | Controls what gets launched on startup. Shell is just the default terminal, autonomy launches all of the nodes needed for full autonomy.
+
 
 ### Creating a new Package
 
