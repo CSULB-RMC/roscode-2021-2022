@@ -94,6 +94,8 @@ if launch_type_string == "shell":
     pass
 elif launch_type_string == "autonomy":
     docker_file_string += genlaunchstring('launch/rmc_launch_autonomy.py')
+elif launch_type_string == "build":
+    docker_file_string += 'RUN echo "/ros/scripts/build_all.sh && exit" >> /home/user/.bashrc\n'
 else:
     print("Invalid launch type.")
     quit()

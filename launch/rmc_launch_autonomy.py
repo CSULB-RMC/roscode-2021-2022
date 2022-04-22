@@ -13,5 +13,11 @@ def generate_launch_description():
             executable='publisher_obstruction',
             name='publisher_obstruction'
         ),
+        Node(
+            package='micro_ros_agent',
+            executable='micro_ros_agent',
+            name='micro_ros_agent',
+            arguments=['serial', '--dev', '/dev/ttyACM0']
+        )
 
     ])
