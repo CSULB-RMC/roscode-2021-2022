@@ -28,7 +28,7 @@ docker_header = """#################################
 # DO NOT EDIT DIRECTLY
 #################################
 
-FROM ros:foxy-ros-base
+FROM ros:foxy
 
 ARG USER_ID
 ARG GROUP_ID
@@ -53,7 +53,8 @@ USER user
 RUN /bin/bash /opt/ros/foxy/setup.bash
 """
 
-docker_footer = """RUN rosdep update
+docker_footer = """COPY disable_fastdds_shm.xml /tmp/
+RUN rosdep update
 RUN rosdep install -i --from-path /ros/dev_ws/src --rosdistro foxy -y
 RUN echo "source /ros/dev_ws/install/setup.bash || true" >> /home/user/.bashrc
 """
@@ -145,9 +146,9 @@ print('uid:', os.getuid())
 print('gid:', os.getgid())
 print('video gid:', grp.getgrnam('video').gr_gid)
 
-docparams='--network host -v $PWD:/ros -w /ros -v /dev/shm:/dev/shm -e ROS_DOMAIN_ID=49' 
+docparams='--net=host -v $PWD:/ros -w /ros -e FASTRTPS_DEFAULT_PROFILES_FILE=/tmp/disable_fastdds_shm.xml ' 
 
 fullbuildexec = 'docker build -f Dockerfile ' + nc_env + ' --build-arg USER_ID=' + str(os.getuid()) + ' --build-arg GROUP_ID=' + str(os.getgid()) + ' --build-arg VIDEO_GROUP_ID=' + str(grp.getgrnam('video').gr_gid) + ' . -t rmc:ros2'
 os.system(fullbuildexec)
-fullrunexec = 'docker run ' + docparams + ' ' + joydev + cameradev + ' --rm -it rmc:ros2'
+fullrunexec = 'docker run ' + docparams + ' ' + joydev + cameradev + ' --device /dev/ttyACM0 --rm -it rmc:ros2'
 os.system(fullrunexec)
