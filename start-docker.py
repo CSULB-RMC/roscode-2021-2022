@@ -95,6 +95,8 @@ if launch_type_string == "shell":
     pass
 elif launch_type_string == "autonomy":
     docker_file_string += genlaunchstring('launch/rmc_launch_autonomy.py')
+elif launch_type_string == "teleop-min":
+    docker_file_string += genlaunchstring('launch/rmc_launch_teleop_min.py')
 elif launch_type_string == "build":
     docker_file_string += 'RUN echo "/ros/scripts/build_all.sh && exit" >> /home/user/.bashrc\n'
 else:
@@ -130,13 +132,28 @@ for x in range(6):
     campath = '/dev/video' + str(x)
     if os.path.exists(campath):
         cameradev += ' --device=' + campath + ' '
-        print('Adding camera: ', campath) 
+        print('Adding camera:', campath) 
 
 if cameradev == '':
     print('###############################')
     print('WARNING: Camera not detected.  Camera nodes will not work.')
     print('###############################')
 #end camera
+
+#microcontroller detection
+mcudev = ''
+
+for x in range(6):
+    mcupath = '/dev/ttyACM' + str(x)
+    if os.path.exists(mcupath):
+        mcudev += ' --device=' + mcupath + ' '
+        print('Adding Microcontroller:', mcupath)
+
+if mcudev == '':
+    print('###############################')
+    print('WARNING: No microcontrollers detected.  Micro-ROS and position tracking will not work.')
+    print('###############################')
+#end microcontroller detection
 
 nc_env=''
 if '-no-cache' in sys.argv:
@@ -150,5 +167,5 @@ docparams='--net=host -v $PWD:/ros -w /ros -e FASTRTPS_DEFAULT_PROFILES_FILE=/tm
 
 fullbuildexec = 'docker build -f Dockerfile ' + nc_env + ' --build-arg USER_ID=' + str(os.getuid()) + ' --build-arg GROUP_ID=' + str(os.getgid()) + ' --build-arg VIDEO_GROUP_ID=' + str(grp.getgrnam('video').gr_gid) + ' . -t rmc:ros2'
 os.system(fullbuildexec)
-fullrunexec = 'docker run ' + docparams + ' ' + joydev + cameradev + ' --device /dev/ttyACM0 --rm -it rmc:ros2'
+fullrunexec = 'docker run ' + docparams + ' ' + joydev + cameradev + mcudev + ' --rm -it rmc:ros2'
 os.system(fullrunexec)
