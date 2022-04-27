@@ -97,6 +97,8 @@ elif launch_type_string == "autonomy":
     docker_file_string += genlaunchstring('launch/rmc_launch_autonomy.py')
 elif launch_type_string == "teleop-min":
     docker_file_string += genlaunchstring('launch/rmc_launch_teleop_min.py')
+elif launch_type_string == "teleop-command":
+    docker_file_string += genlaunchstring('launch/rmc_launch_teleop_command.py')
 elif launch_type_string == "build":
     docker_file_string += 'RUN echo "/ros/scripts/build_all.sh && exit" >> /home/user/.bashrc\n'
 else:
