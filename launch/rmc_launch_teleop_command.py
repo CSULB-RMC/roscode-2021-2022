@@ -11,7 +11,8 @@ def generate_launch_description():
         Node(
             package='joy_linux',
             executable='joy_linux_node',
-            name='joy_linux_node'
+            name='joy_linux_node',
+            parameters=[{'autorepeat_rate': 0.0, 'coalesce_interval': 0.01}]
         ),
         Node(
             package='rmc_teleop',
