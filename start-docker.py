@@ -48,6 +48,14 @@ RUN apt-get upgrade -y
 #ros-noetic-joy should have the drivers we need though...
 RUN echo "KERNEL==\"video[0-9]*\",MODE=\"0666\"" > /usr/lib/udev/rules.d/99-camera.rules
 
+# Following stolen from https://github.com/knickish/teensy_docker
+RUN mkdir -p /etc/udev/rules.d/  && \  
+    echo    ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04*", ENV{ID_MM_DEVICE_IGNORE}="1", ENV{ID_MM_PORT_IGNORE}="1" \
+            ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789a]*", ENV{MTP_NO_PROBE}="1" \
+            KERNEL=="ttyACM*", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04*", MODE:="0666", RUN:="/bin/stty -F /dev/%k raw -echo" \
+            KERNEL=="hidraw*", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04*", MODE:="0666" \
+            SUBSYSTEMS=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04*", MODE:="0666" >> /etc/udev/rules.d/00-teensy.rules
+
 USER user
 
 RUN /bin/bash /opt/ros/foxy/setup.bash
@@ -169,5 +177,5 @@ docparams='--net=host -v $PWD:/ros -w /ros -e FASTRTPS_DEFAULT_PROFILES_FILE=/tm
 
 fullbuildexec = 'docker build -f Dockerfile ' + nc_env + ' --build-arg USER_ID=' + str(os.getuid()) + ' --build-arg GROUP_ID=' + str(os.getgid()) + ' --build-arg VIDEO_GROUP_ID=' + str(grp.getgrnam('video').gr_gid) + ' . -t rmc:ros2'
 os.system(fullbuildexec)
-fullrunexec = 'docker run ' + docparams + ' ' + joydev + cameradev + mcudev + ' --rm -it rmc:ros2'
+fullrunexec = 'docker run ' + docparams + ' --privileged -v /dev/bus/usb:/dev/bus/usb ' + joydev + cameradev + mcudev + ' --rm -it rmc:ros2'
 os.system(fullrunexec)

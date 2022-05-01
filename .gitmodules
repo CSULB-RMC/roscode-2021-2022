@@ -21,3 +21,6 @@
 	path = dev_ws/src/micro_ros_setup
 	url = https://github.com/micro-ROS/micro_ros_setup.git
 	branch = foxy
+[submodule "dev_ws/src/rmc_teensyreboot"]
+	path = dev_ws/src/rmc_teensyreboot
+	url = https://github.com/CSULB-RMC/rmc_teensyreboot.git
