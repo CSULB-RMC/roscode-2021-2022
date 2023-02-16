@@ -1,3 +1,6 @@
+## **THIS REPOSITORY IS NO LONGER USED AND ONLY USED FOR REFERENCE**
+All submodules have been removed and moved to an archive.
+
 # CSULB's ROS code repository for Nasa Lunabotics
 
 This repo contains all of the needed files in order to start and run the rover.  The rover uses an ARM based processor on board to process autonomy and run the teleop code.
